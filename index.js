@@ -79,7 +79,11 @@ if(!RNFetchBlob || !RNFetchBlob.fetchBlobForm || !RNFetchBlob.fetchBlob) {
 }
 
 function wrap(path:string):string {
-  return 'RNFetchBlob-file://' + path
+  if (path.startsWith('content://')) {
+    return 'RNFetchBlob-content://' + path
+  } else {
+    return 'RNFetchBlob-file://' + path
+  }
 }
 
 /**

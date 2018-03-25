@@ -1,5 +1,6 @@
 package com.RNFetchBlob;
 
+import android.net.Uri;
 import android.util.Base64;
 
 import com.facebook.react.bridge.Arguments;
@@ -21,7 +22,12 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
 
+import static com.RNFetchBlob.RNFetchBlobConst.CONTENT_PREFIX;
+
 public class RNFetchBlobBody extends RequestBody{
+
+    private static final int BYTE_SKIP_LENGTH = 1024 * 1024; //1024 * 1024 = 1MB
+
 
     InputStream requestStream;
     long contentLength = 0;
@@ -160,6 +166,14 @@ public class RNFetchBlobBody extends RequestBody{
                 }
             }
         }
+        else if (rawBody.startsWith(RNFetchBlobConst.CONTENT_PREFIX)) {
+            try {
+                String contentUri = rawBody.substring(RNFetchBlobConst.CONTENT_PREFIX.length());
+                return RNFetchBlob.RCTContext.getContentResolver().openInputStream(Uri.parse(contentUri));
+            } catch (IOException e) {
+                throw new Exception("error when getting request stream from content uri: " +e.getLocalizedMessage());
+            }
+        }
         // base 64 encoded
         else {
             try {
@@ -224,6 +238,16 @@ public class RNFetchBlobBody extends RequestBody{
                         else {
                             RNFetchBlobUtils.emitWarningEvent("Failed to create form data from path :" + orgPath + ", file not exists.");
                         }
+                    }
+                }
+                else if (data.startsWith(RNFetchBlobConst.CONTENT_PREFIX)) {
+                    try {
+                        String contentUri = data.substring(RNFetchBlobConst.CONTENT_PREFIX.length());
+                        InputStream inputStream = ctx.getContentResolver().openInputStream(Uri.parse(contentUri));
+
+                        pipeStreamToFileStream(inputStream, os);
+                    } catch (IOException e) {
+                        RNFetchBlobUtils.emitWarningEvent(e.getLocalizedMessage());
                     }
                 }
                 // base64 embedded file content
@@ -323,6 +347,14 @@ public class RNFetchBlobBody extends RequestBody{
                     else {
                         File file = new File(RNFetchBlobFS.normalizePath(orgPath));
                         total += file.length();
+                    }
+                } else if (data.startsWith(RNFetchBlobConst.CONTENT_PREFIX)) {
+                    try {
+                        String contentUri = data.substring(RNFetchBlobConst.CONTENT_PREFIX.length());
+                        long length = ctx.getContentResolver().openInputStream(Uri.parse(contentUri)).available();
+                        total += length;
+                    } catch (IOException e) {
+                        RNFetchBlobUtils.emitWarningEvent(e.getLocalizedMessage());
                     }
                 }
                 // base64 embedded file content

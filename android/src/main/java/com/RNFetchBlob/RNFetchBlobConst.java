@@ -14,5 +14,6 @@ public class RNFetchBlobConst {
     public static final String RNFB_RESPONSE_UTF8  = "utf8";
     public static final String RNFB_RESPONSE_PATH  = "path";
     public static final Integer GET_CONTENT_INTENT = 99900;
+    public static final String CONTENT_PREFIX = "RNFetchBlob-content://";
 
 }
