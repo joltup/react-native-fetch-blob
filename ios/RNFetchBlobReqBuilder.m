@@ -277,7 +277,7 @@
     }
 }
 
-+(NSString *) getHeaderIgnoreCases:(NSString *)field fromHeaders:(NSMutableDictionary *) headers {
++(NSString *) getHeaderIgnoreCases:(NSString *)field fromHeaders:(NSDictionary *) headers {
 
     NSString * normalCase = [headers valueForKey:field];
     NSString * ignoredCase = [headers valueForKey:[field lowercaseString]];

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C4801A6200CF71700FED7ED /* RNFetchBlobRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4801A5200CF71700FED7ED /* RNFetchBlobRequest.m */; };
 		A158F4271D052E49006FFD38 /* RNFetchBlobFS.m in Sources */ = {isa = PBXBuildFile; fileRef = A158F4261D052E49006FFD38 /* RNFetchBlobFS.m */; };
 		A158F42D1D0535BB006FFD38 /* RNFetchBlobConst.m in Sources */ = {isa = PBXBuildFile; fileRef = A158F42C1D0535BB006FFD38 /* RNFetchBlobConst.m */; };
 		A158F4301D0539DB006FFD38 /* RNFetchBlobNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = A158F42F1D0539DB006FFD38 /* RNFetchBlobNetwork.m */; };
@@ -29,6 +30,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8C4801A4200CF71700FED7ED /* RNFetchBlobRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNFetchBlobRequest.h; sourceTree = "<group>"; };
+		8C4801A5200CF71700FED7ED /* RNFetchBlobRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNFetchBlobRequest.m; sourceTree = "<group>"; };
 		A158F4261D052E49006FFD38 /* RNFetchBlobFS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNFetchBlobFS.m; sourceTree = "<group>"; };
 		A158F4281D052E57006FFD38 /* RNFetchBlobFS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNFetchBlobFS.h; sourceTree = "<group>"; };
 		A158F4291D0534A9006FFD38 /* RNFetchBlobConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNFetchBlobConst.h; sourceTree = "<group>"; };
@@ -71,8 +74,10 @@
 				A1F950181D7E9134002A95A6 /* IOS7Polyfill.h */,
 				A1AAE2981D300E4D0051D11C /* RNFetchBlobReqBuilder.m */,
 				A1AAE2971D300E3E0051D11C /* RNFetchBlobReqBuilder.h */,
-				A158F42F1D0539DB006FFD38 /* RNFetchBlobNetwork.m */,
 				A158F42E1D0539CE006FFD38 /* RNFetchBlobNetwork.h */,
+				A158F42F1D0539DB006FFD38 /* RNFetchBlobNetwork.m */,
+				8C4801A4200CF71700FED7ED /* RNFetchBlobRequest.h */,
+				8C4801A5200CF71700FED7ED /* RNFetchBlobRequest.m */,
 				A158F42C1D0535BB006FFD38 /* RNFetchBlobConst.m */,
 				A158F4291D0534A9006FFD38 /* RNFetchBlobConst.h */,
 				A158F4281D052E57006FFD38 /* RNFetchBlobFS.h */,
@@ -149,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A166D1AA1CE0647A00273590 /* RNFetchBlob.h in Sources */,
+				8C4801A6200CF71700FED7ED /* RNFetchBlobRequest.m in Sources */,
 				A158F42D1D0535BB006FFD38 /* RNFetchBlobConst.m in Sources */,
 				A158F4271D052E49006FFD38 /* RNFetchBlobFS.m in Sources */,
 				A158F4301D0539DB006FFD38 /* RNFetchBlobNetwork.m in Sources */,

@@ -29,7 +29,7 @@
                      body:(NSString *)body
                onComplete:(void(^)(NSURLRequest * req, long bodyLength))onComplete;
 
-+(NSString *) getHeaderIgnoreCases:(NSString *)field fromHeaders:(NSMutableArray *) headers;
++(NSString *) getHeaderIgnoreCases:(NSString *)field fromHeaders:(NSDictionary *) headers;
 
 
 @end

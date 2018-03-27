@@ -39,7 +39,6 @@
 @property (retain) UIDocumentInteractionController * documentController;
 
 + (RCTBridge *)getRCTBridge;
-+ (void) checkExpiredSessions;
 
 @end
 

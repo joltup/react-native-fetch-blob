@@ -38,7 +38,7 @@ dispatch_queue_t fsQueue;
 
 + (RCTBridge *)getRCTBridge
 {
-    RCTRootView * rootView = [[UIApplication sharedApplication] keyWindow].rootViewController.view;
+    RCTRootView * rootView = (RCTRootView*) [[UIApplication sharedApplication] keyWindow].rootViewController.view;
     return rootView.bridge;
 }
 
@@ -96,8 +96,12 @@ RCT_EXPORT_METHOD(fetchBlobForm:(NSDictionary *)options
         // send HTTP request
         else
         {
-            RNFetchBlobNetwork * utils = [[RNFetchBlobNetwork alloc] init];
-            [utils sendRequest:options contentLength:bodyLength bridge:self.bridge taskId:taskId withRequest:req callback:callback];
+            [[RNFetchBlobNetwork sharedInstance] sendRequest:options
+                                               contentLength:bodyLength
+                                                      bridge:self.bridge
+                                                      taskId:taskId
+                                                 withRequest:req
+                                                    callback:callback];
         }
     }];
 
@@ -128,8 +132,12 @@ RCT_EXPORT_METHOD(fetchBlob:(NSDictionary *)options
         // send HTTP request
         else
         {
-            __block RNFetchBlobNetwork * utils = [[RNFetchBlobNetwork alloc] init];
-            [utils sendRequest:options contentLength:bodyLength bridge:self.bridge taskId:taskId withRequest:req callback:callback];
+            [[RNFetchBlobNetwork sharedInstance] sendRequest:options
+                                               contentLength:bodyLength
+                                                      bridge:self.bridge
+                                                      taskId:taskId
+                                                 withRequest:req
+                                                    callback:callback];
         }
     }];
 }
@@ -488,7 +496,7 @@ RCT_EXPORT_METHOD(getEnvironmentDirs:(RCTResponseSenderBlock) callback)
 
 #pragma mark - net.cancelRequest
 RCT_EXPORT_METHOD(cancelRequest:(NSString *)taskId callback:(RCTResponseSenderBlock)callback) {
-    [RNFetchBlobNetwork cancelRequest:taskId];
+    [[RNFetchBlobNetwork sharedInstance] cancelRequest:taskId];
     callback(@[[NSNull null], taskId]);
 
 }
@@ -498,14 +506,14 @@ RCT_EXPORT_METHOD(enableProgressReport:(NSString *)taskId interval:(nonnull NSNu
 {
 
     RNFetchBlobProgress * cfg = [[RNFetchBlobProgress alloc] initWithType:Download interval:interval count:count];
-    [RNFetchBlobNetwork enableProgressReport:taskId config:cfg];
+    [[RNFetchBlobNetwork sharedInstance] enableProgressReport:taskId config:cfg];
 }
 
 #pragma mark - net.enableUploadProgressReport
 RCT_EXPORT_METHOD(enableUploadProgressReport:(NSString *)taskId interval:(nonnull NSNumber*)interval count:(nonnull NSNumber*)count)
 {
     RNFetchBlobProgress * cfg = [[RNFetchBlobProgress alloc] initWithType:Upload interval:interval count:count];
-    [RNFetchBlobNetwork enableUploadProgress:taskId config:cfg];
+    [[RNFetchBlobNetwork sharedInstance] enableUploadProgress:taskId config:cfg];
 }
 
 #pragma mark - fs.slice
