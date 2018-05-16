@@ -668,7 +668,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                     // #297 handle failed request
                     int statusCode = c.getInt(c.getColumnIndex(DownloadManager.COLUMN_STATUS));
                     if(statusCode == DownloadManager.STATUS_FAILED) {
-                        this.callback.invoke("Download manager failed to download from  " + this.url + ". Statu Code = " + statusCode, null, null);
+                        this.callback.invoke("Download manager failed to download from  " + this.url + ". Status Code = " + statusCode, null, null);
                         return;
                     }
                     String contentUri = c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
