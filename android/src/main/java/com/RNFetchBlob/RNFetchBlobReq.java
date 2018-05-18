@@ -695,7 +695,9 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
     public static OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder client) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
             try {
-                client.sslSocketFactory(new TLSSocketFactory());
+                //we should not reset sslSocketFactory here, this will override the sslSocketFactory
+                // which is set in method RnFetchBlobUtils.getUnsafeOkHttpClient, makes trusty config broken in Android4.4 
+                //client.sslSocketFactory(new TLSSocketFactory());
 
                 ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                         .tlsVersions(TlsVersion.TLS_1_2)
