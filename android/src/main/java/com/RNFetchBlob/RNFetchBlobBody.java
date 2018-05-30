@@ -187,12 +187,12 @@ class RNFetchBlobBody extends RequestBody{
         ReactApplicationContext ctx = RNFetchBlob.RCTContext;
 
         for(FormField field : fields) {
-            String data = field.data.trim();
-            String name = field.name.trim();
             // skip invalid fields
-            if(name == null || data == null)
+            if(field.name == null || field.data == null)
                 continue;
             // form begin
+            String data = field.data.trim();
+            String name = field.name.trim();
             String header = "--" + boundary + "\r\n";
             if (field.filename != null) {
                 header += "Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + field.filename + "\"\r\n";
