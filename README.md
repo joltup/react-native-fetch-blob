@@ -35,6 +35,7 @@ A project committed to making file access and data transfer easier and more effi
  * [Multipart/form upload](#multipartform-data-example-post-form-data-with-file-and-data)
  * [Upload/Download progress](#user-content-uploaddownload-progress)
  * [Cancel HTTP request](#user-content-cancel-request)
+ * [iOS Background Downloading/Uploading](#user-content-ios-background-downloadinguploading)
  * [Android Media Scanner, and Download Manager Support](#user-content-android-media-scanner-and-download-manager-support)
  * [Self-Signed SSL Server](#user-content-self-signed-ssl-server)
  * [Transfer Encoding](#user-content-transfer-encoding)
@@ -480,6 +481,28 @@ task.cancel((err) => { ... })
 If you have existing code that uses `whatwg-fetch`(the official **fetch**), it's not necessary to replace them with `RNFetchblob.fetch`, you can simply use our **Fetch Replacement**. The difference between Official them is official fetch uses [whatwg-fetch](https://github.com/github/fetch) which wraps XMLHttpRequest polyfill under the hood. It's a great library for web developers, but does not play very well with RN. Our implementation is simply a wrapper of our `fetch` and `fs` APIs, so you can access all the features we provided.
 
 [See document and examples](https://github.com/wkh237/react-native-fetch-blob/wiki/Fetch-API#fetch-replacement)
+
+### iOS Background Downloading/Uploading
+
+Normally, iOS interrupts network connections when an app is moved to the background, and will throw an error 'Lost connection to background transfer service' when the app resumes. To continue the upload or download of large files even when the app is in the background, you will need to enable IOSDownloadTask or IOSUploadTask options. The following example shows how to download a file in the background - uploading is similar except for using the IOSUploadTask config option instead.
+
+```js
+
+RNFetchBlob
+    .config({
+        IOSBackgroundTask: true, // required for both upload and download
+        IOSDownloadTask: true, // For downloading in the background
+        // IOSUploadTask: true, // Use instead of IOSDownloadTask if uploading
+        path : dirs.DocumentDir + '/music.mp3'
+    })
+    .fetch('GET', 'http://example.com/music.mp3')
+    .progress((received, total) => {
+        console.log(`Received ${received} of ${total}`);
+    })
+    .catch((err) => {
+        // transfer error
+    })
+```
 
 ### Android Media Scanner, and Download Manager Support
 

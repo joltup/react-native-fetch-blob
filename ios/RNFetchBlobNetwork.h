@@ -37,8 +37,9 @@ typedef void(^DataTaskCompletionHander) (NSData * _Nullable resp, NSURLResponse 
 @property (nullable, nonatomic) RNFetchBlobFS * fileStream;
 @property (strong, nonatomic) CompletionHander fileTaskCompletionHandler;
 @property (strong, nonatomic) DataTaskCompletionHander dataTaskCompletionHandler;
-@property (nullable, nonatomic) NSError * error;
 
+@property (nullable, nonatomic) NSError * error;
+@property (nonatomic, strong) __block NSURLSession * session;
 
 + (NSMutableDictionary  * _Nullable ) normalizeHeaders:(NSDictionary * _Nullable)headers;
 + (void) cancelRequest:(NSString *)taskId;
