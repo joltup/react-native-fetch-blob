@@ -3,7 +3,10 @@ package com.RNFetchBlob;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 
 import com.RNFetchBlob.Utils.DataConverter;
 import com.facebook.react.bridge.ActivityEventListener;
@@ -20,6 +23,7 @@ import com.facebook.react.modules.network.CookieJarContainer;
 import com.facebook.react.modules.network.ForwardingCookieHandler;
 import com.facebook.react.modules.network.OkHttpClientProvider;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -101,16 +105,36 @@ public class RNFetchBlob extends ReactContextBaseJavaModule {
     @ReactMethod
     public void actionViewIntent(String path, String mime, final Promise promise) {
         try {
-            Intent intent= new Intent(Intent.ACTION_VIEW)
-                    .setDataAndType(Uri.parse("file://" + path), mime);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            this.getReactApplicationContext().startActivity(intent);
+            Uri uriForFile = FileProvider.getUriForFile(getCurrentActivity(),
+                    this.getReactApplicationContext().getPackageName() + ".provider", new File(path));
+
+            if (Build.VERSION.SDK_INT >= 24) {
+                // Create the intent with data and type
+                Intent intent = new Intent(Intent.ACTION_VIEW)
+                        .setDataAndType(uriForFile, mime);
+
+                // Set flag to give temporary permission to external app to use FileProvider
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                // Validate that the device can open the file
+                PackageManager pm = getCurrentActivity().getPackageManager();
+                if (intent.resolveActivity(pm) != null) {
+                    this.getReactApplicationContext().startActivity(intent);
+                }
+
+            } else {
+                Intent intent = new Intent(Intent.ACTION_VIEW)
+                        .setDataAndType(Uri.parse("file://" + path), mime).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                this.getReactApplicationContext().startActivity(intent);
+            }
+
             ActionViewVisible = true;
 
             final LifecycleEventListener listener = new LifecycleEventListener() {
                 @Override
                 public void onHostResume() {
-                    if(ActionViewVisible)
+                    if (ActionViewVisible)
                         promise.resolve(null);
                     RCTContext.removeLifecycleEventListener(this);
                 }
@@ -126,7 +150,7 @@ public class RNFetchBlob extends ReactContextBaseJavaModule {
                 }
             };
             RCTContext.addLifecycleEventListener(listener);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             promise.reject(ex.getLocalizedMessage());
         }
     }
