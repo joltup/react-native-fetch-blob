@@ -1,5 +1,6 @@
 package com.RNFetchBlob.Response;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.RNFetchBlob.RNFetchBlobConst;
@@ -48,11 +49,11 @@ public class RNFetchBlobFileResp extends ResponseBody {
             File f = new File(path);
 
             File parent = f.getParentFile();
-            if(!parent.exists() && !parent.mkdirs()){
+            if(parent != null && !parent.exists() && !parent.mkdirs()){
                 throw new IllegalStateException("Couldn't create dir: " + parent);
             }
 
-            if(f.exists() == false)
+            if(!f.exists())
                 f.createNewFile();
             ofStream = new FileOutputStream(new File(path), appendToExistingFile);
         }
@@ -76,7 +77,7 @@ public class RNFetchBlobFileResp extends ResponseBody {
 
     private class ProgressReportingSource implements Source {
         @Override
-        public long read(Buffer sink, long byteCount) throws IOException {
+        public long read(@NonNull Buffer sink, long byteCount) throws IOException {
             try {
                 byte[] bytes = new byte[(int) byteCount];
                 long read = originalBody.byteStream().read(bytes, 0, (int) byteCount);

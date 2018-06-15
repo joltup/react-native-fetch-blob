@@ -1,5 +1,6 @@
 package com.RNFetchBlob.Utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.io.FileOutputStream;
 
 public class PathResolver {
+    @TargetApi(19)
     public static String getRealPathFromURI(final Context context, final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;

@@ -1,15 +1,3 @@
-## New Maintainers
-
-We make quite a bit of use of react-native-fetch-blob at Jolt and would like to maintain the project.  Feel free to open issues, PRs, etc. here as you would on the original repository.  We will be investigating a new npm namespace under which to publish future versions of this library.
-
-<br>
-
-## About Pull Requests
-
-Bugfixes should be applied to the `0.10.9` branch and new features should be applied to the `0.11.0`. Documentation/README updates can be applied directly to `master`.
-
-<br>
-
 # react-native-fetch-blob
 [![release](https://img.shields.io/github/release/wkh237/react-native-fetch-blob.svg?style=flat-square)](https://github.com/wkh237/react-native-fetch-blob/releases) [![npm](https://img.shields.io/npm/v/react-native-fetch-blob.svg?style=flat-square)](https://www.npmjs.com/package/react-native-fetch-blob) ![](https://img.shields.io/badge/PR-Welcome-brightgreen.svg?style=flat-square) [![](https://img.shields.io/badge/Wiki-Public-brightgreen.svg?style=flat-square)](https://github.com/wkh237/react-native-fetch-blob/wiki) [![npm](https://img.shields.io/npm/l/react-native-fetch-blob.svg?maxAge=2592000&style=flat-square)]()
 
@@ -30,9 +18,9 @@ A project committed to making file access and data transfer easier and more effi
 * [Installation](#user-content-installation)
 * [HTTP Data Transfer](#user-content-http-data-transfer)
  * [Regular Request](#user-content-regular-request)
- * [Download file](#download-example-fetch-files-that-need-authorization-token)
+ * [Download file](#user-content-download-example--fetch-files-that-needs-authorization-token)
  * [Upload file](#user-content-upload-example--dropbox-files-upload-api)
- * [Multipart/form upload](#multipartform-data-example-post-form-data-with-file-and-data)
+ * [Multipart/form upload](#user-content-multipartform-data-example--post-form-data-with-file-and-data)
  * [Upload/Download progress](#user-content-uploaddownload-progress)
  * [Cancel HTTP request](#user-content-cancel-request)
  * [Android Media Scanner, and Download Manager Support](#user-content-android-media-scanner-and-download-manager-support)
@@ -611,10 +599,12 @@ File Access APIs
 - [dirs](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#dirs)
 - [createFile](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#createfilepath-data-encodingpromise)
 - [writeFile (0.6.0)](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#writefilepathstring-contentstring--array-encodingstring-appendbooleanpromise)
-- [appendFile (0.6.0) ](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#appendfilepathstring-contentstring--array-encodingstringpromise)
+- [appendFile (0.6.0) ](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#appendfilepathstring-contentstring--arraynumber-encodingstring-promisenumber)
 - [readFile (0.6.0)](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#readfilepath-encodingpromise)
-- [readStream](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#readstreampath-encoding-buffersizepromise)
-- [writeStream](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#writestreampathstring-encodingstring-appendbooleanpromise)
+- [readStream](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#readstreampath-encoding-buffersize-interval-promisernfbreadstream)
+- [hash (0.10.9)](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#hashpath-algorithm-promise)
+- [writeStream](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#writestreampathstring-encodingstringpromise)
+- [hash](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#hashpath-algorithmpromise)
 - [unlink](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#unlinkpathstringpromise)
 - [mkdir](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#mkdirpathstringpromise)
 - [ls](https://github.com/wkh237/react-native-fetch-blob/wiki/File-System-Access-API#lspathstringpromise)
@@ -657,12 +647,51 @@ RNFetchBlob.fs.readStream(
       console.log('oops', err)
     })
     ifstream.onEnd(() => {  
-      <Image source={{ uri : 'data:image/png,base64' + data }}/>
+      <Image source={{ uri : 'data:image/png,base64' + data }}
     })
 })
 ```
 
 When using `writeStream`, the stream object becomes writable, and you can then perform operations like `write` and `close`.
+
+Since version 0.10.9 `write()` resolves with the `RNFetchBlob` instance so you can promise-chain write calls:
+
+```js
+RNFetchBlob.fs.writeStream(
+    PATH_TO_FILE,
+    // encoding, should be one of `base64`, `utf8`, `ascii`
+    'utf8',
+    // should data append to existing content ?
+    true
+)
+.then(ofstream => ofstream.write('foo'))
+.then(ofstream => ofstream.write('bar'))
+.then(ofstream => ofstream.write('foobar'))
+.then(ofstream => ofstream.close())
+.catch(console.error)
+```
+
+or 
+
+```js
+RNFetchBlob.fs.writeStream(
+    PATH_TO_FILE,
+    // encoding, should be one of `base64`, `utf8`, `ascii`
+    'utf8',
+    // should data append to existing content ?
+    true
+)
+.then(stream => Promise.all([
+    stream.write('foo'),
+    stream.write('bar'),
+    stream.write('foobar')
+]))
+// Use array destructuring to get the stream object from the first item of the array we get from Promise.all()
+.then(([stream]) => stream.close())
+.catch(console.error)
+```
+
+You should **NOT** do something like this:
 
 ```js
 RNFetchBlob.fs.writeStream(
@@ -672,12 +701,17 @@ RNFetchBlob.fs.writeStream(
     // should data append to existing content ?
     true)
 .then((ofstream) => {
+    // BAD IDEA - Don't do this, those writes are unchecked:
     ofstream.write('foo')
     ofstream.write('bar')
     ofstream.close()
 })
-
+.catch(console.error)  // Cannot catch any write() errors!
 ```
+
+The problem with the above code is that the promises from the `ofstream.write()` calls are detached and "Lost".
+That means the entire promise chain A) resolves without waiting for the writes to finish and B) any errors caused by them are lost.
+That code may _seem_ to work if there are no errors, but those writes are of the type "fire and forget": You start them and then turn away and never know if they really succeeded.
 
 ### Cache File Management
 

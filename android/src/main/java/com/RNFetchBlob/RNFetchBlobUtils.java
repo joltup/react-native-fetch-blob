@@ -27,7 +27,7 @@ public class RNFetchBlobUtils {
             md.update(input.getBytes());
             byte[] digest = md.digest();
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
 
             for (byte b : digest) {
                 sb.append(String.format("%02x", b & 0xff));
@@ -37,6 +37,7 @@ public class RNFetchBlobUtils {
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
+            // TODO: Is discarding errors the intent? (https://www.owasp.org/index.php/Return_Inside_Finally_Block)
             return result;
         }
 

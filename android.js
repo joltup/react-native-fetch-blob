@@ -13,7 +13,7 @@ const RNFetchBlob:RNFetchBlobNative = NativeModules.RNFetchBlob
 
 /**
  * Send an intent to open the file.
- * @param  {string]} path Path of the file to be open.
+ * @param  {string} path Path of the file to be open.
  * @param  {string} mime MIME type string
  * @return {Promise}
  */
@@ -38,9 +38,25 @@ function addCompleteDownload(config) {
     return Promise.reject('RNFetchBlob.android.addCompleteDownload only supports Android.')
 }
 
+function getSDCardDir() {
+  if(Platform.OS === 'android')
+    return RNFetchBlob.getSDCardDir()
+  else
+    return Promise.reject('RNFetchBlob.android.getSDCardDir only supports Android.')
+}
+
+function getSDCardApplicationDir() {
+  if(Platform.OS === 'android')
+    return RNFetchBlob.getSDCardApplicationDir()
+  else
+    return Promise.reject('RNFetchBlob.android.getSDCardApplicationDir only supports Android.')
+}
+
 
 export default {
   actionViewIntent,
   getContentIntent,
-  addCompleteDownload
+  addCompleteDownload,
+  getSDCardDir,
+  getSDCardApplicationDir,
 }

@@ -73,7 +73,7 @@ class RNFetchBlobFetchPolyfill {
               // release blob cache created when sending request
               if(blobCache !== null && blobCache instanceof Blob)
                 blobCache.close()
-              return Promise.resolve(new RNFetchBlobFetchRepsonse(resp))
+              return Promise.resolve(new RNFetchBlobFetchResponse(resp))
             })
           })
 
@@ -97,7 +97,7 @@ class RNFetchBlobFetchPolyfill {
 
 }
 
-class RNFetchBlobFetchRepsonse {
+class RNFetchBlobFetchResponse {
 
   constructor(resp:FetchBlobResponse) {
     let info = resp.info()

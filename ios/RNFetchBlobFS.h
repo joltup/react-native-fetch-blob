@@ -34,8 +34,8 @@
     NSString * streamId;
 }
 
-@property (nonatomic) NSOutputStream * outStream;
-@property (nonatomic) NSInputStream * inStream;
+@property (nonatomic) NSOutputStream * _Nullable outStream;
+@property (nonatomic) NSInputStream * _Nullable inStream;
 @property (strong, nonatomic) RCTResponseSenderBlock callback;
 @property (nonatomic) RCTBridge * bridge;
 @property (nonatomic) NSString * encoding;
@@ -58,11 +58,16 @@
 // fs methods
 + (RNFetchBlobFS *) getFileStreams;
 + (BOOL) mkdir:(NSString *) path;
++ (void) mkdir:(NSString *) path resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject;
++ (void) hash:(NSString *)path
+    algorithm:(NSString *)algorithm
+     resolver:(RCTPromiseResolveBlock)resolve
+     rejecter:(RCTPromiseRejectBlock)reject;
 + (NSDictionary *) stat:(NSString *) path error:(NSError **) error;
 + (void) exists:(NSString *) path callback:(RCTResponseSenderBlock)callback;
 + (void) writeFileArray:(NSString *)path data:(NSArray *)data append:(BOOL)append resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject;
 + (void) writeFile:(NSString *)path encoding:(NSString *)encoding data:(NSString *)data append:(BOOL)append resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject;
-+ (void) readFile:(NSString *)path encoding:(NSString *)encoding onComplete:(void (^)(NSData * content, NSString * errMsg))onComplete;
++ (void) readFile:(NSString *)path encoding:(NSString *)encoding onComplete:(void (^)(NSData * content, NSString* code, NSString * errMsg))onComplete;
 + (void) readAssetFile:(NSData *)assetUrl completionBlock:(void(^)(NSData * content))completionBlock failBlock:(void(^)(NSError * err))failBlock;
 + (void) slice:(NSString *)path
          dest:(NSString *)dest

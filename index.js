@@ -17,7 +17,7 @@ import type {
   RNFetchBlobResponseInfo
 } from './types'
 import URIUtil from './utils/uri'
-import StatefulPromise from './class/StatefulPromise.js'
+//import StatefulPromise from './class/StatefulPromise.js'
 import fs from './fs'
 import getUUID from './utils/uuid'
 import base64 from 'base-64'
@@ -118,7 +118,7 @@ function config (options:RNFetchBlobConfig) {
  * @param  {string} method     Should be one of `get`, `post`, `put`
  * @param  {string} url        A file URI string
  * @param  {string} headers    Arguments of file system API
- * @param  {any} body       Data to put or post to file systen.
+ * @param  {any}    body       Data to put or post to file systen.
  * @return {Promise}
  */
 function fetchFile(options = {}, method, url, headers = {}, body):Promise {
@@ -520,13 +520,12 @@ class FetchBlobResponse {
     }
     /**
      * Start read stream from cached file
-     * @param  {String} encoding Encode type, should be one of `base64`, `ascrii`, `utf8`.
-     * @param  {Function} fn On data event handler
+     * @param  {String} encoding Encode type, should be one of `base64`, `ascii`, `utf8`.
      * @return {void}
      */
-    this.readStream = (encode: 'base64' | 'utf8' | 'ascii'):RNFetchBlobStream | null => {
+    this.readStream = (encoding: 'base64' | 'utf8' | 'ascii'):RNFetchBlobStream | null => {
       if(this.type === 'path') {
-        return readStream(this.data, encode)
+        return readStream(this.data, encoding)
       }
       else {
         console.warn('RNFetchblob', 'this response data does not contains any available stream')
@@ -539,10 +538,9 @@ class FetchBlobResponse {
      * @param  {String} encoding Encode type, should be one of `base64`, `ascrii`, `utf8`.
      * @return {String}
      */
-    this.readFile = (encode: 'base64' | 'utf8' | 'ascii') => {
+    this.readFile = (encoding: 'base64' | 'utf8' | 'ascii') => {
       if(this.type === 'path') {
-        encode = encode || 'utf8'
-        return readFile(this.data, encode)
+        return readFile(this.data, encoding)
       }
       else {
         console.warn('RNFetchblob', 'this response does not contains a readable file')

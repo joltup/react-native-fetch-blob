@@ -2,14 +2,17 @@ import Oboe from './lib/oboe-browser.min.js'
 import XMLHttpRequest from './polyfill/XMLHttpRequest'
 import URIUtil from './utils/uri'
 
-const OboeExtended = (arg: string | object) => {
+const OboeExtended = (arg: string | Object) => {
 
 
   window.location = ''
 
   if(!window.XMLHttpRequest.isRNFBPolyfill ) {
     window.XMLHttpRequest = XMLHttpRequest
-    console.warn('Use JSONStream will automatically replace window.XMLHttpRequest with RNFetchBlob.polyfill.XMLHttpRequest. You are seeing this warning because you did not replace it maually.')
+    console.warn(
+        'Use JSONStream will automatically replace window.XMLHttpRequest with RNFetchBlob.polyfill.XMLHttpRequest. ' +
+        'You are seeing this warning because you did not replace it manually.'
+    )
   }
 
   if(typeof arg === 'string') {

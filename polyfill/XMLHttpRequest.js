@@ -224,8 +224,8 @@ export default class XMLHttpRequest extends XMLHttpRequestEventTarget{
       /[\(\)\>\<\@\,\:\\\/\[\]\?\=\}\{\s\ \u007f\;\t\0\v\r]/,
       /tt/
     ]
-    for(let i in invalidPatterns) {
-      if(invalidPatterns[i].test(name) || typeof name !== 'string') {
+    for(let pattern of invalidPatterns) {
+      if(pattern.test(name) || typeof name !== 'string') {
         throw `SyntaxError : Invalid header field name ${name}`
       }
     }

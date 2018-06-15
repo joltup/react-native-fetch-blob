@@ -3,10 +3,7 @@ package com.RNFetchBlob;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
-import java.util.HashMap;
-
-
-public class RNFetchBlobConfig {
+class RNFetchBlobConfig {
 
     public Boolean fileCache;
     public String path;

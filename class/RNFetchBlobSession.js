@@ -9,16 +9,11 @@ import {
 } from 'react-native'
 
 const RNFetchBlob = NativeModules.RNFetchBlob
-const emitter = DeviceEventEmitter
 
 let sessions = {}
 
 export default class RNFetchBlobSession {
 
-  add : (path:string) => RNFetchBlobSession;
-  remove : (path:string) => RNFetchBlobSession;
-  dispose : () => Promise;
-  list : () => Array<string>;
   name : string;
 
   static getSession(name:string):any {
@@ -50,7 +45,7 @@ export default class RNFetchBlobSession {
 
   remove(path:string):RNFetchBlobSession {
     let list = sessions[this.name]
-    for(let i in list) {
+    for(let i of list) {
       if(list[i] === path) {
         sessions[this.name].splice(i, 1)
         break;
@@ -67,7 +62,7 @@ export default class RNFetchBlobSession {
     return new Promise((resolve, reject) => {
       RNFetchBlob.removeSession(sessions[this.name], (err) => {
         if(err)
-          reject(err)
+          reject(new Error(err))
         else {
           delete sessions[this.name]
           resolve()

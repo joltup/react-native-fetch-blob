@@ -35,7 +35,7 @@ export default class RNFetchBlobReadStream {
 
     // register for file stream event
     let subscription = emitter.addListener(this.streamId, (e) => {
-      let {event, detail} = e
+      let {event, code, detail} = e
       if(this._onData && event === 'data') {
         this._onData(detail)
         return
@@ -44,10 +44,12 @@ export default class RNFetchBlobReadStream {
         this._onEnd(detail)
       }
       else {
+        const err = new Error(detail)
+        err.code = code || 'EUNSPECIFIED'
         if(this._onError)
-          this._onError(detail)
+          this._onError(err)
         else
-          throw new Error(detail)
+          throw err
       }
       // when stream closed or error, remove event handler
       if (event === 'error' || event === 'end') {
