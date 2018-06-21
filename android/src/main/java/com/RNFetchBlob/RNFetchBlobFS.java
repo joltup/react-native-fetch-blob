@@ -544,8 +544,10 @@ public class RNFetchBlobFS {
         }
         String[] files = new File(path).list();
         WritableArray arg = Arguments.createArray();
-        for (String i : files) {
-            arg.pushString(i);
+        if(files!=null) {
+            for (String i : files) {
+                arg.pushString(i);
+            }
         }
         callback.invoke(null, arg);
     }
