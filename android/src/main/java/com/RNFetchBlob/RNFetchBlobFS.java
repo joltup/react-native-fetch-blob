@@ -548,6 +548,7 @@ class RNFetchBlobFS {
         path = normalizePath(path);
         InputStream in = null;
         OutputStream out = null;
+        String message = "";
 
         try {
             if(!isPathExists(path)) {
@@ -571,7 +572,7 @@ class RNFetchBlobFS {
                 out.write(buf, 0, len);
             }
         } catch (Exception err) {
-            callback.invoke(err.getLocalizedMessage());
+            message += err.getLocalizedMessage();
         } finally {
             try {
                 if (in != null) {
@@ -582,8 +583,13 @@ class RNFetchBlobFS {
                 }
                 callback.invoke();
             } catch (Exception e) {
-                callback.invoke(e.getLocalizedMessage());
+                message += e.getLocalizedMessage();
             }
+        }
+        if (message != "") {
+            callback.invoke(message);
+        } else {
+            callback.invoke();
         }
     }
 
