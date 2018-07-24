@@ -17,7 +17,7 @@ android {
     compileSdkVersion project.hasProperty('compileSdkVersion') ? project.compileSdkVersion : 23
     buildToolsVersion project.hasProperty('buildToolsVersion') ? project.buildToolsVersion : "23.0.1"
     defaultConfig {
-        minSdkVersion project.hasProperty('minSdkVersion') ? project.targetSdkVersion : 16
+        minSdkVersion project.hasProperty('minSdkVersion') ? project.minSdkVersion : 16
         targetSdkVersion project.hasProperty('targetSdkVersion') ? project.targetSdkVersion : 23
         versionCode 1
         versionName "1.0"
