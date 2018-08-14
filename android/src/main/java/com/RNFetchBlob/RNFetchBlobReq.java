@@ -587,16 +587,32 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
         info.putString("state", "2");
         info.putString("taskId", this.taskId);
         info.putBoolean("timeout", timeout);
-        WritableMap headers = Arguments.createMap();
-        for(int i =0;i< resp.headers().size();i++) {
-            headers.putString(resp.headers().name(i), resp.headers().value(i));
+        WritableArray headers = Arguments.createArray();
+        /**
+         * the old code is using a map ,
+         * consider header below:
+         * 
+         * Connection: keep-alive
+         * Date: Mon, 13 Aug 2018 11:11:48 GMT
+         * ETag: W/"8-9BOBjXyx6UNNcb4Wi4o6kw"
+         * Set-Cookie: ck1=hello%20rn; Max-Age=360; Path=/; Expires=Mon, 13 Aug 2018 11:17:48 GMT
+         * Set-Cookie: ck2=helloworld; Max-Age=360; Path=/; Expires=Mon, 13 Aug 2018 11:17:48 GMT
+         * X-Powered-By: Express
+         * 
+         * set-cookie will be covered
+         * 
+        */
+        for (int i = 0; i < resp.headers().size(); i++) {
+            headers.pushString(resp.headers().name(i));
+            headers.pushString(resp.headers().value(i));
         }
+        WritableArray redirectList = Arguments.createArray();
         WritableArray redirectList = Arguments.createArray();
         for(String r : redirects) {
             redirectList.pushString(r);
         }
         info.putArray("redirects", redirectList);
-        info.putMap("headers", headers);
+        info.putArray("headers", headers);
         Headers h = resp.headers();
         if(isBlobResp) {
             info.putString("respType", "blob");

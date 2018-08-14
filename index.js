@@ -247,9 +247,29 @@ function fetch(...args:any):Promise {
     })
 
     stateEvent = emitter.addListener('RNFetchBlobState', (e) => {
+      let state = e;
+      // headers is return as array ,convert to map 
+      if(state.headers && Array.isArray(state.headers)){
+         let headers = {};
+         let i = 0;
+         while(i+1 < state.headers.length){
+          let key = state.headers[i].toLowerCase();
+          let value = state.headers[i+1];
+          if(key.indexof("cookie") > -1 && key.indexof("set") > -1){
+            !headers["set-cookie"]  &&  (headers["set-cookie"] = []);
+            headers["set-ccokie"].push(value);
+          }else{
+            headers[key] = value;
+          }
+
+          i+=2;
+         }
+         state.headers = headers;
+      }
+
       if(e.taskId === taskId)
-        respInfo = e
-      promise.onStateChange && promise.onStateChange(e)
+        respInfo = state
+      promise.onStateChange && promise.onStateChange(state)
     })
 
     subscription = emitter.addListener('RNFetchBlobExpire', (e) => {
