@@ -434,7 +434,12 @@ NSMutableDictionary *fileStreams = nil;
         // prevent stack overflow, alloc on heap
         char * bytes = (char*) malloc([data count]);
         for(int i = 0; i < data.count; i++) {
-            bytes[i] = [[data objectAtIndex:i] charValue];
+            id object = [data objectAtIndex:i];
+            if ([object isKindOfClass:[NSNumber class]]) {
+                bytes[i] = [object unsignedIntegerValue];
+            } else {
+                bytes[i] = [[data objectAtIndex:i] charValue];
+            }
         }
         [fileContent appendBytes:bytes length:data.count];
 
