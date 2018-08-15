@@ -6,13 +6,13 @@ try {
   var PACKAGE_JSON = process.cwd() + '/package.json';
   var package = JSON.parse(fs.readFileSync(PACKAGE_JSON));
   var APP_NAME = package.name;
-  var PACKAGE_GRADLE = process.cwd() + '/node_modules/react-native-fetch-blob/android/build.gradle'
+  var PACKAGE_GRADLE = process.cwd() + '/node_modules/rn-fetch-blob/android/build.gradle'
   var VERSION = checkVersion();
 
   console.log('RNFetchBlob detected app version => ' + VERSION);
 
   if(VERSION < 0.28) {
-    console.log('You project version is '+ VERSION + ' which may not compatible to react-native-fetch-blob 7.0+, please consider upgrade your application template to react-native 0.27+.')
+    console.log('You project version is '+ VERSION + ' which may not compatible to rn-fetch-blob 7.0+, please consider upgrade your application template to react-native 0.27+.')
     // add OkHttp3 dependency fo pre 0.28 project
     var main = fs.readFileSync(PACKAGE_GRADLE);
     console.log('adding OkHttp3 dependency to pre 0.28 project .. ')
@@ -52,7 +52,7 @@ try {
   }
   else {
     console.log(
-      '\033[95mreact-native-fetch-blob \033[97mwill not automatically add Android permissions after \033[92m0.9.4 '+
+      '\033[95mrn-fetch-blob \033[97mwill not automatically add Android permissions after \033[92m0.9.4 '+
       '\033[97mplease run the following command if you want to add default permissions :\n\n' +
       '\033[96m\tRNFB_ANDROID_PERMISSIONS=true react-native link \n')
   }
@@ -64,8 +64,8 @@ try {
 
 } catch(err) {
   console.log(
-    '\033[95mreact-native-fetch-blob\033[97m link \033[91mFAILED \033[97m\nCould not automatically link package :'+
+    '\033[95mrn-fetch-blob\033[97m link \033[91mFAILED \033[97m\nCould not automatically link package :'+
     err.stack +
     'please follow the instructions to manually link the library : ' +
-    '\033[4mhttps://github.com/wkh237/react-native-fetch-blob/wiki/Manually-Link-Package\n')
+    '\033[4mhttps://github.com/joltup/rn-fetch-blob/wiki/Manually-Link-Package\n')
 }

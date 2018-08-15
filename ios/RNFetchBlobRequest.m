@@ -345,8 +345,8 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
          sendDeviceEventWithName:EVENT_PROGRESS
          body:@{
                 @"taskId": taskId,
-                @"written": [NSString stringWithFormat:@"%ld", (long) receivedBytes],
-                @"total": [NSString stringWithFormat:@"%ld", (long) expectedBytes],
+                @"written": [NSString stringWithFormat:@"%lld", (long long) receivedBytes],
+                @"total": [NSString stringWithFormat:@"%lld", (long long) expectedBytes],
                 @"chunk": chunkString
                 }
          ];

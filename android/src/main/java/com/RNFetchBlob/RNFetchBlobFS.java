@@ -246,13 +246,17 @@ class RNFetchBlobFS {
         state = Environment.getExternalStorageState();
         if (state.equals(Environment.MEDIA_MOUNTED)) {
             res.put("SDCardDir", Environment.getExternalStorageDirectory().getAbsolutePath());
-            try {
-                res.put("SDCardApplicationDir", ctx.getExternalFilesDir(null).getParentFile().getAbsolutePath());
-            } catch(Exception e) {
-                res.put("SDCardApplicationDir", "");
+
+            File externalDirectory = ctx.getExternalFilesDir(null);
+
+            if (externalDirectory != null) {
+                res.put("SDCardApplicationDir", externalDirectory.getParentFile().getAbsolutePath());
+            } else {
+              res.put("SDCardApplicationDir", "");
             }
         }
         res.put("MainBundleDir", ctx.getApplicationInfo().dataDir);
+
         return res;
     }
 
@@ -595,16 +599,29 @@ class RNFetchBlobFS {
             callback.invoke("Source file at path `" + path + "` does not exist");
             return;
         }
+
         try {
-            boolean result = src.renameTo(new File(dest));
-            if (!result) {
-                callback.invoke("mv failed for unknown reasons");
-                return;
+            InputStream in = new FileInputStream(path);
+            OutputStream out = new FileOutputStream(dest);
+
+            //read source path to byte buffer. Write from input to output stream
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) { //read is successful
+                out.write(buffer, 0, read);
             }
+            in.close();
+            out.flush();
+
+            src.delete(); //remove original file
+        } catch (FileNotFoundException exception) {
+            callback.invoke("Source file not found.");
+            return;
         } catch (Exception e) {
-            callback.invoke(e.getLocalizedMessage());
+            callback.invoke(e.toString());
             return;
         }
+
         callback.invoke();
     }
 

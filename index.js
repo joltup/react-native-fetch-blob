@@ -72,7 +72,7 @@ emitter.addListener("RNFetchBlobMessage", (e) => {
 // Show warning if native module not detected
 if(!RNFetchBlob || !RNFetchBlob.fetchBlobForm || !RNFetchBlob.fetchBlob) {
   console.warn(
-    'react-native-fetch-blob could not find valid native module.',
+    'rn-fetch-blob could not find valid native module.',
     'please make sure you have linked native modules using `rnpm link`,',
     'and restart RN packager or manually compile IOS/Android project.'
   )
@@ -247,9 +247,29 @@ function fetch(...args:any):Promise {
     })
 
     stateEvent = emitter.addListener('RNFetchBlobState', (e) => {
+      let state = e;
+      // headers is return as array ,convert to map 
+      if(state.headers && Array.isArray(state.headers)){
+         let headers = {};
+         let i = 0;
+         while(i+1 < state.headers.length){
+          let key = state.headers[i].toLowerCase();
+          let value = state.headers[i+1];
+          if(key.indexOf("cookie") > -1 && key.indexOf("set") > -1){
+            !headers["set-cookie"]  &&  (headers["set-cookie"] = []);
+            headers["set-ccokie"].push(value);
+          }else{
+            headers[key] = value;
+          }
+
+          i+=2;
+         }
+         state.headers = headers;
+      }
+
       if(e.taskId === taskId)
-        respInfo = e
-      promise.onStateChange && promise.onStateChange(e)
+        respInfo = state
+      promise.onStateChange && promise.onStateChange(state)
     })
 
     subscription = emitter.addListener('RNFetchBlobExpire', (e) => {

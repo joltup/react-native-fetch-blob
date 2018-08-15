@@ -281,7 +281,7 @@ class RNFetchBlobBody extends RequestBody{
      */
     private void pipeStreamToSink(InputStream stream, BufferedSink sink) throws IOException {
         byte[] chunk = new byte[10240];
-        int totalWritten = 0;
+        long totalWritten = 0;
         int read;
         while((read = stream.read(chunk, 0, 10240)) > 0) {
             sink.write(chunk, 0, read);
@@ -403,7 +403,7 @@ class RNFetchBlobBody extends RequestBody{
      * Emit progress event
      * @param written  Integer
      */
-    private void emitUploadProgress(int written) {
+    private void emitUploadProgress(long written) {
         RNFetchBlobProgressConfig config = RNFetchBlobReq.getReportUploadProgress(mTaskId);
         if(config != null && contentLength != 0 && config.shouldReport((float)written/contentLength)) {
             WritableMap args = Arguments.createMap();

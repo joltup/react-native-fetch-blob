@@ -372,6 +372,11 @@ public class RNFetchBlob extends ReactContextBaseJavaModule {
     @ReactMethod
     public void addCompleteDownload (ReadableMap config, Promise promise) {
         DownloadManager dm = (DownloadManager) RCTContext.getSystemService(RCTContext.DOWNLOAD_SERVICE);
+        if (config == null || !config.hasKey("path"))
+        {
+            promise.reject("EINVAL", "RNFetchblob.addCompleteDownload config or path missing.");
+            return;
+        }
         String path = RNFetchBlobFS.normalizePath(config.getString("path"));
         if(path == null) {
             promise.reject("EINVAL", "RNFetchblob.addCompleteDownload can not resolve URI:" + config.getString("path"));
