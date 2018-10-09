@@ -15,6 +15,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
@@ -661,6 +662,7 @@ class RNFetchBlobFS {
      * @param path Target folder
      * @param callback  JS context callback
      */
+    @ReactMethod
     static void ls(String path, Promise promise) {
         try {
             path = normalizePath(path);
