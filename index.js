@@ -79,8 +79,13 @@ if(!RNFetchBlob || !RNFetchBlob.fetchBlobForm || !RNFetchBlob.fetchBlob) {
 }
 
 function wrap(path:string):string {
-  const prefix = path.startsWith('content://') ? 'RNFetchBlob-content://' : 'RNFetchBlob-file://'
-  return prefix + path
+  if (path.startsWith('content://')) {
+    return 'RNFetchBlob-content://' + path.substring('content://'.length)
+  } else if (path.startsWith('file://')) {
+    return 'RNFetchBlob-file://' + path.substring('file://'.length)
+  }
+
+  return 'RNFetchBlob-file://' + path
 }
 
 /**
