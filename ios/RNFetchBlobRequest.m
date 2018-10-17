@@ -359,7 +359,9 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 
 - (void) URLSession:(NSURLSession *)session didBecomeInvalidWithError:(nullable NSError *)error
 {
-    RCTLog(@"[RNFetchBlobRequest] session didBecomeInvalidWithError %@", [error description]);
+    if (error) {
+        RCTLog(@"[RNFetchBlobRequest] entering URLSession:didBecomeInvalidWithError: %@", [error description]);
+    }
     if ([session isEqual:session]) {
         session = nil;
     }
@@ -368,7 +370,9 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 
 - (void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-    RCTLog(@"[RNFetchBlobRequest] session didCompleteWithError %@", [error description]);
+    if (error) {
+        RCTLog(@"[RNFetchBlobRequest] URLSession:task:didCompleteWithError: %@", [error description]);
+    }
     self.error = error;
     NSString * errMsg;
     NSString * respStr;
