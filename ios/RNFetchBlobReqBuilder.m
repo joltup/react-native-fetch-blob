@@ -11,6 +11,7 @@
 #import "RNFetchBlobNetwork.h"
 #import "RNFetchBlobConst.h"
 #import "RNFetchBlobFS.h"
+#import "RNFetchBlob.h"
 #import "IOS7Polyfill.h"
 
 #if __has_include(<React/RCTAssert.h>)
@@ -145,6 +146,27 @@
                         [request setHTTPBody:bodyBytes];
                     }
                 }
+                // when body is a string contains image store path prefix, try load file from image store
+                else if([body hasPrefix:IMAGE_STORE_PREFIX]) {
+                    RCTImageStoreManager *imageStore = [RNFetchBlob getRCTBridge].imageStoreManager;
+                    [imageStore getImageDataForTag:body withBlock:^(NSData *content) {
+                        [request setHTTPBody:content];
+                        [request setHTTPMethod: method];
+                        BOOL allowAddHeaders = YES;
+                        if ([mheaders objectForKey:@"x-amz-content-sha256"] != nil && [mheaders objectForKey:@"authorization"] != nil) {
+                            allowAddHeaders = NO;
+                        }
+
+                        if (allowAddHeaders) {
+                            [mheaders setValue:[NSString stringWithFormat:@"%lu",[content length]] forKey:@"Content-Length"];
+                        }
+
+                        [request setAllHTTPHeaderFields:mheaders];
+                        onComplete(request, [content length]);
+                    }];
+
+                    return;
+                }
                 // otherwise convert it as BASE64 data string
                 else {
 
@@ -248,6 +270,30 @@
                         }];
                         return ;
                     }
+                    else if ([content hasPrefix:IMAGE_STORE_PREFIX]) {
+                      RCTImageStoreManager *imageStore = [RNFetchBlob getRCTBridge].imageStoreManager;
+                      [imageStore getImageDataForTag:content withBlock:^(NSData *imageData) {
+                          NSString * filename = [field valueForKey:@"filename"];
+                          [formData appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+                          [formData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", name, filename] dataUsingEncoding:NSUTF8StringEncoding]];
+                          [formData appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", contentType] dataUsingEncoding:NSUTF8StringEncoding]];
+                          [formData appendData:imageData];
+                          [formData appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+                          i++;
+                          if(i < count)
+                          {
+                            __block NSDictionary * nextField = [form objectAtIndex:i];
+                            getFieldData(nextField);
+                          }
+                          else
+                          {
+                            onComplete(formData, NO);
+                            getFieldData = nil;
+                          }
+                      }];
+
+                      return;
+                    }
                     else
                         blobData = [[NSData alloc] initWithBase64EncodedString:content options:0];
                 }
@@ -287,6 +333,5 @@
         return ignoredCase;
 
 }
-
 
 @end

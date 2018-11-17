@@ -18,12 +18,14 @@
 #import <React/RCTBridge.h>
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTBridgeModule.h>
+#import <React/RCTImageStoreManager.h>
 #else
 #import "RCTBridgeModule.h"
 #import "RCTLog.h"
 #import "RCTRootView.h"
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
+#import "RCTImageStoreManager.h"
 #endif
 
 #import <UIKit/UIKit.h>

@@ -8,6 +8,7 @@
 #import "RNFetchBlobConst.h"
 
 NSString *const FILE_PREFIX = @"RNFetchBlob-file://";
+NSString *const IMAGE_STORE_PREFIX = @"rct-image-store://";
 NSString *const ASSET_PREFIX = @"bundle-assets://";
 NSString *const AL_PREFIX = @"assets-library://";
 

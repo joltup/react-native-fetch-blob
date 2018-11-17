@@ -24,6 +24,7 @@ extern NSString *const EVENT_PROGRESS_UPLOAD;
 extern NSString *const EVENT_STATE_CHANGE;
 
 extern NSString *const FILE_PREFIX;
+extern NSString *const IMAGE_STORE_PREFIX;
 extern NSString *const ASSET_PREFIX;
 extern NSString *const AL_PREFIX;
 
