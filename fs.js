@@ -245,6 +245,13 @@ function hash(path: string, algorithm: string): Promise<string> {
   return RNFetchBlob.hash(path, algorithm)
 }
 
+function hashWithKey(path: string, algorithm: string, key: string): Promise<string> {
+  if (typeof path !== 'string' || typeof algorithm !== 'string' || typeof key !== 'string') {
+    return Promise.reject(addCode('EINVAL', new TypeError('Missing argument "path" and/or "algorithm" and/or "key"')))
+  }
+  return RNFetchBlob.hashWithKey(path, algorithm, key)
+}
+
 function cp(path: string, dest: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
     if (typeof path !== 'string' || typeof dest !== 'string') {
@@ -404,6 +411,7 @@ export default {
   pathForAppGroup,
   readFile,
   hash,
+  hashWithKey,
   exists,
   createFile,
   isDir,
