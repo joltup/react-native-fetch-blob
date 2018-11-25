@@ -12,27 +12,18 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, ProgressType) {
-    Download,
-    Upload,
+    ProgressTypeDownload,
+    ProgressTypeUpload,
 };
 
 @interface RNFetchBlobProgress : NSObject
-{
-    NSNumber * count;
-    NSNumber * interval;
-    ProgressType type;
-    BOOL enable;
-    
-}
 
-@property (nonatomic) NSNumber * count;
-@property (nonatomic) NSNumber * interval;
-@property (nonatomic) NSInteger type;
-@property (nonatomic) BOOL enable;
+@property (nonatomic) NSInteger count;
+@property (nonatomic) float interval;
+@property (nonatomic) ProgressType type;
 
--(id)initWithType:(ProgressType)type interval:(NSNumber*)interval count:(NSNumber *)count;
--(BOOL)shouldReport:(NSNumber *) nextProgress;
-
+- (id)initWithType:(ProgressType)type interval:(float)interval count:(NSInteger)count;
+- (BOOL)shouldReportProgress:(float)nextProgress;
 
 @end
 

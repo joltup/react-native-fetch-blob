@@ -539,14 +539,14 @@ RCT_EXPORT_METHOD(cancelRequest:(NSString *)taskId callback:(RCTResponseSenderBl
 RCT_EXPORT_METHOD(enableProgressReport:(NSString *)taskId interval:(nonnull NSNumber*)interval count:(nonnull NSNumber*)count)
 {
 
-    RNFetchBlobProgress * cfg = [[RNFetchBlobProgress alloc] initWithType:Download interval:interval count:count];
+    RNFetchBlobProgress * cfg = [[RNFetchBlobProgress alloc] initWithType:ProgressTypeDownload interval:interval.floatValue count:count.integerValue];
     [[RNFetchBlobNetwork sharedInstance] enableProgressReport:taskId config:cfg];
 }
 
 #pragma mark - net.enableUploadProgressReport
 RCT_EXPORT_METHOD(enableUploadProgressReport:(NSString *)taskId interval:(nonnull NSNumber*)interval count:(nonnull NSNumber*)count)
 {
-    RNFetchBlobProgress * cfg = [[RNFetchBlobProgress alloc] initWithType:Upload interval:interval count:count];
+    RNFetchBlobProgress * cfg = [[RNFetchBlobProgress alloc] initWithType:ProgressTypeUpload interval:interval.floatValue count:count.integerValue];
     [[RNFetchBlobNetwork sharedInstance] enableUploadProgress:taskId config:cfg];
 }
 
