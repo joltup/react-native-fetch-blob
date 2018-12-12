@@ -335,9 +335,9 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
         return;
     }
     
-    NSNumber * now =[NSNumber numberWithFloat:((float)receivedBytes/(float)expectedBytes)];
+    float progress = (float)receivedBytes / (float)expectedBytes;
     
-    if ([self.progressConfig shouldReport:now]) {
+    if ([self.progressConfig shouldReportProgress:progress]) {
         [self.bridge.eventDispatcher
          sendDeviceEventWithName:EVENT_PROGRESS
          body:@{
@@ -441,9 +441,9 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
         return;
     }
     
-    NSNumber * now = [NSNumber numberWithFloat:((float)totalBytesWritten/(float)totalBytesExpectedToWrite)];
+    float progress = (float)totalBytesWritten / (float) totalBytesExpectedToWrite;
     
-    if ([self.uploadProgressConfig shouldReport:now]) {
+    if ([self.uploadProgressConfig shouldReportProgress:progress]) {
         [self.bridge.eventDispatcher
          sendDeviceEventWithName:EVENT_PROGRESS_UPLOAD
          body:@{

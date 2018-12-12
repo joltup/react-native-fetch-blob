@@ -10,48 +10,37 @@
 
 @interface RNFetchBlobProgress ()
 {
-    float progress;
-    int tick;
+@private
+    int currentCount;
     double lastTick;
 }
 @end
 
 @implementation RNFetchBlobProgress
 
--(id)initWithType:(ProgressType)type interval:(NSNumber *)interval count:(NSNumber *)count
+- (id)initWithType:(ProgressType)type interval:(float)interval count:(NSInteger)count
 {
     self = [super init];
     self.count = count;
-    self.interval = [NSNumber numberWithFloat:[interval floatValue] /1000];
+    self.interval = interval / 1000;
     self.type = type;
-    self.enable = YES;
     lastTick = 0;
-    tick = 1;
+    currentCount = 0;
     return self;
 }
 
--(BOOL)shouldReport:(NSNumber *)nextProgress
+- (BOOL)shouldReportProgress:(float)nextProgress
 {
-    BOOL * result = YES;
-    float countF = [self.count floatValue];
-    if(countF > 0 && [nextProgress floatValue] > 0)
-    {
-        result = (int)(floorf([nextProgress floatValue]*countF)) >= tick;
+    if (self.count > 0 && nextProgress < (float)currentCount / self.count) {
+        return NO;
     }
-    
     NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-    // NSTimeInterval is defined as double
-    NSNumber *timeStampObj = [NSNumber numberWithDouble: timeStamp];
-    float delta = [timeStampObj doubleValue] - lastTick;
-    BOOL * shouldReport = delta > [self.interval doubleValue] && self.enable && result;
-    if(shouldReport)
-    {
-        tick++;
-        lastTick = [timeStampObj doubleValue];
+    if (self.interval > 0 && timeStamp - lastTick < self.interval) {
+        return NO;
     }
-    return shouldReport;
-    
+    currentCount++;
+    lastTick = timeStamp;
+    return YES;
 }
-
 
 @end
