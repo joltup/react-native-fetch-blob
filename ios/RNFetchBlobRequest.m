@@ -146,7 +146,12 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     float timeout = [options valueForKey:@"timeout"] == nil ? -1 : [[options valueForKey:@"timeout"] floatValue];
     
     if (timeout > 0) {
-        defaultConfigObject.timeoutIntervalForRequest = timeout/1000;
+        if (uploadTask) {
+            defaultConfigObject.timeoutIntervalForResource = timeout/1000;
+        }
+        else {
+            defaultConfigObject.timeoutIntervalForRequest = timeout/1000;
+        }
     }
     
     defaultConfigObject.HTTPMaximumConnectionsPerHost = 10;
