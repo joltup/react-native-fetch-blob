@@ -14,7 +14,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import okhttp3.OkHttpClient;
+import expolib_v1.okhttp3.OkHttpClient;
 
 
 public class RNFetchBlobUtils {

@@ -24,8 +24,8 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.network.ForwardingCookieHandler;
 import com.facebook.react.modules.network.CookieJarContainer;
 import com.facebook.react.modules.network.OkHttpClientProvider;
-import okhttp3.OkHttpClient;
-import okhttp3.JavaNetCookieJar;
+import expolib_v1.okhttp3.OkHttpClient;
+import expolib_v1.okhttp3.JavaNetCookieJar;
 
 import java.io.File;
 import java.util.HashMap;
