@@ -83,7 +83,7 @@ If automatically linking doesn't work for you, see instructions on [manually lin
 For 0.29.2+ projects, simply link native packages via the following command (note: rnpm has been merged into react-native)
 
 ```
-react-native link
+react-native link rn-fetch-blob
 ```
 
 As for projects < 0.29 you need `rnpm` to link native packages
@@ -95,7 +95,7 @@ rnpm link
 Optionally, use the following command to add Android permissions to `AndroidManifest.xml` automatically
 
 ```sh
-RNFB_ANDROID_PERMISSIONS=true react-native link
+RNFB_ANDROID_PERMISSIONS=true react-native link rn-fetch-blob
 ```
 
 pre 0.29 projects
