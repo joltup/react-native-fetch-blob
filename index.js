@@ -20,6 +20,7 @@ import URIUtil from './utils/uri'
 import fs from './fs'
 import getUUID from './utils/uuid'
 import base64 from 'base-64'
+import polyfill from './polyfill'
 import _ from 'lodash'
 import android from './android'
 import ios from './ios'
@@ -40,6 +41,7 @@ const {
   cp
 } = fs
 
+const Blob = polyfill.Blob
 const emitter = DeviceEventEmitter
 const RNFetchBlob = NativeModules.RNFetchBlob
 
@@ -261,6 +263,12 @@ function fetch(...args:any):Promise {
       }
     })
 
+    // When the request body comes from Blob polyfill, we should use special its ref
+    // as the request body
+    if( body instanceof Blob && body.isRNFetchBlobPolyfill) {
+      body = body.getRNFetchBlobRef()
+    }
+
     let req = RNFetchBlob[nativeMethodName]
 
     /**
@@ -422,17 +430,18 @@ class FetchBlobResponse {
      * @return {Promise<Blob>} Return a promise resolves Blob object.
      */
     this.blob = ():Promise<Blob> => {
+      let Blob = polyfill.Blob
       let cType = info.headers['Content-Type'] || info.headers['content-type']
       return new Promise((resolve, reject) => {
         switch(this.type) {
           case 'base64':
-            resolve(new Blob([this.data], { type : cType + ';BASE64' }))
+            Blob.build(this.data, { type : cType + ';BASE64' }).then(resolve)
           break
           case 'path':
-            resolve(new Blob([wrap(this.data)], { type : cType }))
+            polyfill.Blob.build(wrap(this.data), { type : cType }).then(resolve)
           break
           default:
-            resolve(new Blob([this.data], { type : 'text/plain' }))
+            polyfill.Blob.build(this.data, { type : 'text/plain' }).then(resolve)
           break
         }
       })
@@ -551,5 +560,6 @@ export default {
   session,
   fs,
   wrap,
+  polyfill,
   JSONStream
 }
