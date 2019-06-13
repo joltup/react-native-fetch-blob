@@ -37,12 +37,24 @@ public class PathResolver {
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
+                try {
+                    final String id = DocumentsContract.getDocumentId(uri);
+                    //Starting with Android O, this "id" is not necessarily a long (row number),
+                    //but might also be a "raw:/some/file/path" URL
+                    if (id != null && id.startsWith("raw:/")) {
+                        Uri rawuri = Uri.parse(id);
+                        String path = rawuri.getPath();
+                        return path;
+                    }
+                    final Uri contentUri = ContentUris.withAppendedId(
+                            Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
+                    return getDataColumn(context, contentUri, null, null);
+                }
+                catch (Exception ex) {
+                    //something went wrong, but android should still be able to handle the original uri by returning null here (see readFile(...))
+                    return null;
+                }
             }
             // MediaProvider
             else if (isMediaDocument(uri)) {
