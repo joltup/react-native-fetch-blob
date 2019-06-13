@@ -1,6 +1,6 @@
 {
   "name": "rn-fetch-blob",
-  "version": "0.10.15",
+  "version": "0.10.16",
   "description": "A module provides upload, download, and files access API. Supports file stream read/write for process large files.",
   "main": "index.js",
   "scripts": {
