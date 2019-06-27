@@ -659,7 +659,6 @@ class RNFetchBlobFS {
     /**
      * List content of folder
      * @param path Target folder
-     * @param callback  JS context callback
      */
     static void ls(String path, Promise promise) {
         try {
