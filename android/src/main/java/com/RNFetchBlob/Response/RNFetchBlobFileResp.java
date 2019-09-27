@@ -69,7 +69,11 @@ public class RNFetchBlobFileResp extends ResponseBody {
     }
 
     public boolean isDownloadComplete() {
-        return bytesDownloaded == contentLength();
+        long contentLen = contentLength();
+        if (contentLen < 0)
+          return bytesDownloaded > 0;
+
+        return bytesDownloaded == contentLen;
     }
 
     @Override
