@@ -15,7 +15,7 @@ function uriForFile(path: string) {
   if (Platform.OS === 'android')
     return RNFetchBlob.uriForFile(path);
   else
-    return Promise.reject('RNFetchBlob.android.actionViewIntent only supports Android.')
+    return Promise.reject('RNFetchBlob.android.uriForFile only supports Android.')
 }
 
 /**
