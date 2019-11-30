@@ -6,6 +6,8 @@
 //  Copyright © 2019 wkh237.github.io. All rights reserved.
 //
 
+// Borrowed from https://stackoverflow.com/a/3711079/15186
+
 #import <Foundation/Foundation.h>
 
 #import "DDFileReader.h"
