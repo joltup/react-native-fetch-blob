@@ -117,7 +117,7 @@
 - (void) enumerateLinesUsingBlock:(void(^)(NSString*, BOOL*))block {
   NSString * line = nil;
   BOOL stop = NO;
-  while (stop == NO && (line = [self readLine])) {
+  while (stop == NO && (line = [self readTrimmedLine])) {
     block(line, &stop);
   }
 }
