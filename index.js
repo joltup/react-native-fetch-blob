@@ -104,7 +104,13 @@ function wrap(path:string):string {
  *                   activity takes place )
  *                   If it doesn't exist, the file is downloaded as usual
  *         @property {number} timeout
- *                   Request timeout in millionseconds, by default it's 30000ms.
+ *                   Request timeout in millionseconds, by default it's 60000ms.
+ *         @property {boolean} followRedirect
+ *                   Follow redirects automatically, default true
+ *         @property {boolean} trusty
+ *                   Trust all certificates
+ *         @property {boolean} wifiOnly
+ *                   Only do requests through WiFi. Android SDK 21 or above only.
  *
  * @return {function} This method returns a `fetch` method instance.
  */

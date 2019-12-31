@@ -41,7 +41,7 @@ rn-fetch-blob version 0.10.16 is only compatible with react native 0.60 and up. 
 
 ## About
 
-This project was started in the cause of solving issue [facebook/react-native#854](https://github.com/facebook/react-native/issues/854), React Native's lacks of `Blob` implementation which results into problems when transferring binary data. 
+This project was started in the cause of solving issue [facebook/react-native#854](https://github.com/facebook/react-native/issues/854), React Native's lacks of `Blob` implementation which results into problems when transferring binary data.
 
 It is committed to making file access and transfer easier and more efficient for React Native developers. We've implemented highly customizable filesystem and network module which plays well together. For example, developers can upload and download data directly from/to storage, which is more efficient, especially for large files. The file system supports file stream, so you don't have to worry about OOM problem when accessing large files.
 
@@ -116,8 +116,8 @@ If you're going to access external storage (say, SD card storage) for `Android 5
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-+   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />                                               
-+   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />                                              
++   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
++   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 +   <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     ...
 
@@ -129,8 +129,16 @@ Also, if you're going to use `Android Download Manager` you have to add this to 
     <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
-+           <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>                          
++           <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
     </intent-filter>
+```
+
+If you are going to use the `wifiOnly` flag, you need to add this to `AndroidManifest.xml`
+
+```diff
++   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    ...
+
 ```
 
 **Grant Access Permission for Android 6.0**
@@ -168,7 +176,7 @@ To sum up:
 
 - To send a form data, the `Content-Type` header does not matter. When the body is an `Array` we will set proper content type for you.
 - To send binary data, you have two choices, use BASE64 encoded string or path points to a file contains the body.
- - If the `Content-Type` containing substring`;BASE64` or `application/octet` the given body will be considered as a BASE64 encoded data which will be decoded to binary data as the request body.   
+ - If the `Content-Type` containing substring`;BASE64` or `application/octet` the given body will be considered as a BASE64 encoded data which will be decoded to binary data as the request body.
  - Otherwise, if a string starts with `RNFetchBlob-file://` (which can simply be done by `RNFetchBlob.wrap(PATH_TO_THE_FILE)`), it will try to find the data from the URI string after `RNFetchBlob-file://` and use it as the request body.
 - To send the body as-is, simply use a `Content-Type` header not containing `;BASE64` or `application/octet`.
 
@@ -189,7 +197,7 @@ RNFetchBlob.fetch('GET', 'http://www.example.com/images/img1.png', {
   })
   .then((res) => {
     let status = res.info().status;
-    
+
     if(status == 200) {
       // the conversion is done in native code
       let base64Str = res.base64()
@@ -290,7 +298,7 @@ RNFetchBlob.fetch('POST', 'https://content.dropboxapi.com/2/files/upload', {
     'Content-Type' : 'application/octet-stream',
     // here's the body you're going to send, should be a BASE64 encoded string
     // (you can use "base64"(refer to the library 'mathiasbynens/base64') APIs to make one).
-    // The data will be converted to "byte array"(say, blob) before request sent.  
+    // The data will be converted to "byte array"(say, blob) before request sent.
   }, base64ImageString)
   .then((res) => {
     console.log(res.text())
@@ -648,7 +656,7 @@ RNFetchBlob.fs.readStream(
     ifstream.onError((err) => {
       console.log('oops', err)
     })
-    ifstream.onEnd(() => {  
+    ifstream.onEnd(() => {
       <Image source={{ uri : 'data:image/png,base64' + data }}
     })
 })
@@ -673,7 +681,7 @@ RNFetchBlob.fs.writeStream(
 .catch(console.error)
 ```
 
-or 
+or
 
 ```js
 RNFetchBlob.fs.writeStream(
@@ -749,7 +757,7 @@ You can also group requests by using `session` API and use `dispose` to remove t
   .then((res) => {
     // set session of a response
     res.session('foo')
-  })  
+  })
 
   RNFetchblob.config({
     // you can also set session beforehand
@@ -759,7 +767,7 @@ You can also group requests by using `session` API and use `dispose` to remove t
   .fetch('GET', 'http://example.com/download/file')
   .then((res) => {
     // ...
-  })  
+  })
 
   // or put an existing file path to the session
   RNFetchBlob.session('foo').add('some-file-path')
@@ -787,6 +795,22 @@ By default, rn-fetch-blob does NOT allow connection to unknown certification pro
 ```js
 RNFetchBlob.config({
   trusty : true
+})
+.fetch('GET', 'https://mysite.com')
+.then((resp) => {
+  // ...
+})
+```
+
+### WiFi only requests
+
+If you wish to only route requests through the Wifi interface, set the below configuration.
+Note: On Android, the `ACCESS_NETWORK_STATE` permission must be set, and this flag will only work
+on API version 21 (Lollipop, Android 5.0) or above. APIs below 21 will ignore this flag.
+
+```js
+RNFetchBlob.config({
+  wifiOnly : true
 })
 .fetch('GET', 'https://mysite.com')
 .then((resp) => {

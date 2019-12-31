@@ -163,7 +163,9 @@ export type RNFetchBlobConfig = {
   path?: string,
   session?: string,
   timeout?: number,
-  trusty?: boolean
+  trusty?: boolean,
+  wifiOnly?: boolean,
+  followRedirect?: boolean
 };
 export type RNFetchBlobResponseInfo = {
   headers: {[fieldName: string]: string},

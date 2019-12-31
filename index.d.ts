@@ -451,6 +451,33 @@ export interface IOSApi {
     openDocument(path: string): void;
 }
 
+export interface AndroidDownloadOption {
+    /**
+     * Title string to be displayed when the file added to Downloads app.
+     */
+    title: string
+
+    /**
+     * File description to be displayed when the file added to Downloads app.
+     */
+    description: string
+
+    /**
+     * MIME string of the file.
+     */
+    mime: string
+
+    /**
+     * URI string of the file.
+     */
+    path: string
+
+    /**
+     * Boolean value that determines if notification will be displayed.
+     */
+    showNotification: boolean 
+}
+
 export interface AndroidApi {
     /**
      * When sending an ACTION_VIEW intent with given file path and MIME type, system will try to open an
@@ -459,6 +486,25 @@ export interface AndroidApi {
      * @param mime Basically system will open an app according to this MIME type.
      */
     actionViewIntent(path: string, mime: string): Promise<any>;
+
+    /**
+     * 
+     * This method brings up OS default file picker and resolves a file URI when the user selected a file.
+     * However, it does not resolve or reject when user dismiss the file picker via pressing hardware back button,
+     * but you can still handle this behavior via AppState.
+     * @param mime MIME type filter, only the files matches the MIME will be shown.
+     */
+    getContentIntent(mime: string): Promise<any>;
+
+    /**
+     * Using this function to add an existing file to Downloads app.
+     * @param options An object that for setting the title, description, mime, and notification of the item.
+     */
+    addCompleteDownload(options: AndroidDownloadOption): Promise<void>;
+
+    getSDCardDir(): Promise<string>;
+
+    getSDCardApplicationDir(): Promise<string>;
 }
 
 type Methods = "POST" | "GET" | "DELETE" | "PUT" | "post" | "get" | "delete" | "put";
@@ -545,6 +591,16 @@ export interface RNFetchBlobConfig {
      * certification. This is not recommended to use in production.
      */
     trusty?: boolean;
+
+    /**
+     * Set this property to true will only do requests through the WiFi interface, and fail otherwise.
+     */
+    wifiOnly?: boolean;
+
+    /**
+     * Set this property so redirects are not automatically followed.
+     */
+    followRedirect?: boolean;
 
     /**
      * Set this property to true will makes response data of the fetch stored in a temp file, by default the temp
