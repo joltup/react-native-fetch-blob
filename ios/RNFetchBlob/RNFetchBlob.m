@@ -110,6 +110,7 @@ RCT_EXPORT_METHOD(fetchBlobForm:(NSDictionary *)options
                                                       bridge:self.bridge
                                                       taskId:taskId
                                                  withRequest:req
+                                                    filePath:nil
                                                     callback:callback];
         }
     }];
@@ -132,7 +133,7 @@ RCT_EXPORT_METHOD(fetchBlob:(NSDictionary *)options
                                      headers:headers
                                         body:body
                                   onComplete:^(NSURLRequest *req, long bodyLength)
-    {
+     {
         // something went wrong when building the request body
         if(req == nil)
         {
@@ -141,11 +142,20 @@ RCT_EXPORT_METHOD(fetchBlob:(NSDictionary *)options
         // send HTTP request
         else
         {
+            
+            NSString * fileName = nil;
+            // Post or put large file
+            if([body hasPrefix:FILE_PREFIX]) {
+                fileName = [body substringFromIndex:[FILE_PREFIX length]];
+                fileName = [RNFetchBlobFS getPathOfAsset:fileName];
+            }
+            
             [[RNFetchBlobNetwork sharedInstance] sendRequest:options
                                                contentLength:bodyLength
                                                       bridge:self.bridge
                                                       taskId:taskId
                                                  withRequest:req
+                                                    filePath:fileName
                                                     callback:callback];
         }
     }];

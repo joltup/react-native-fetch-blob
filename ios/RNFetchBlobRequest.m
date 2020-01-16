@@ -71,6 +71,7 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
               taskId:(NSString * _Nullable)taskId
          withRequest:(__weak NSURLRequest * _Nullable)req
   taskOperationQueue:(NSOperationQueue * _Nonnull)operationQueue
+            filePath:(NSString *)filePath
             callback:(_Nullable RCTResponseSenderBlock) callback
 {
     self.taskId = taskId;
@@ -161,7 +162,15 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
         respFile = NO;
     }
 
-    self.task = [session dataTaskWithRequest:req];
+    if (filePath != nil &&
+        ([req.HTTPMethod.lowercaseString isEqualToString:@"post"] ||
+                      [req.HTTPMethod.lowercaseString isEqualToString:@"put"]) ) {
+        self.task = [session uploadTaskWithRequest:req fromFile:[NSURL URLWithString:filePath]];
+
+    } else {
+        self.task = [session dataTaskWithRequest:req];
+        
+    }
     [self.task resume];
 
     // network status indicator
