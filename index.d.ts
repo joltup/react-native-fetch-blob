@@ -475,7 +475,7 @@ export interface AndroidDownloadOption {
     /**
      * Boolean value that determines if notification will be displayed.
      */
-    showNotification: boolean 
+    showNotification: boolean
 }
 
 export interface AndroidApi {
@@ -488,7 +488,7 @@ export interface AndroidApi {
     actionViewIntent(path: string, mime: string): Promise<any>;
 
     /**
-     * 
+     *
      * This method brings up OS default file picker and resolves a file URI when the user selected a file.
      * However, it does not resolve or reject when user dismiss the file picker via pressing hardware back button,
      * but you can still handle this behavior via AppState.
@@ -607,6 +607,11 @@ export interface RNFetchBlobConfig {
      * file will stored in App's own root folder with file name template RNFetchBlob_tmp${timestamp}.
      */
     fileCache?: boolean;
+
+    /**
+     * Set this property to true to allow multipath tcp connection (wifi assist)
+     */
+    multipath?: boolean;
 
     /**
      * Set this property to change temp file extension that created by fetch response data.

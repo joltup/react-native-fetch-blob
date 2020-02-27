@@ -8,7 +8,8 @@ type RNFetchBlobConfig = {
   indicator : bool,
   followRedirect : bool,
   trusty : bool,
-  wifiOnly : bool
+  wifiOnly : bool,
+  multipath: bool
 };
 
 type RNFetchBlobNative = {
