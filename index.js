@@ -111,6 +111,8 @@ function wrap(path:string):string {
  *                   Trust all certificates
  *         @property {boolean} wifiOnly
  *                   Only do requests through WiFi. Android SDK 21 or above only.
+ *         @property {boolean} multipath
+ *                   Allow wifi assist
  *
  * @return {function} This method returns a `fetch` method instance.
  */

@@ -165,6 +165,7 @@ export type RNFetchBlobConfig = {
   timeout?: number,
   trusty?: boolean,
   wifiOnly?: boolean,
+  multipath?: boolean,
   followRedirect?: boolean
 };
 export type RNFetchBlobResponseInfo = {

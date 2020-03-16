@@ -126,6 +126,12 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 
     if([options valueForKey:CONFIG_WIFI_ONLY] != nil && ![options[CONFIG_WIFI_ONLY] boolValue]){
         [defaultConfigObject setAllowsCellularAccess:NO];
+    } else if([options valueForKey:CONFIG_MULTIPATH] != nil && [options[CONFIG_MULTIPATH] boolValue]){
+        if (@available(iOS 11.0, *)) {
+            [defaultConfigObject setMultipathServiceType:NSURLSessionMultipathServiceTypeInteractive];
+        } else {
+            // Fallback on earlier versions
+        }
     }
 
     defaultConfigObject.HTTPMaximumConnectionsPerHost = 10;
