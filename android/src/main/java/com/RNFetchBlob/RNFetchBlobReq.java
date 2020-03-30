@@ -565,7 +565,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                         // This usually mean the data is contains invalid unicode characters but still valid data,
                         // it's binary data, so send it as a normal string
                         catch(CharacterCodingException ignored) {
-                            
+
                             if(responseFormat == ResponseFormat.UTF8) {
                                 String utf8 = new String(b);
                                 callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_UTF8, utf8);
@@ -592,13 +592,17 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                 }
 
                 RNFetchBlobFileResp rnFetchBlobFileResp;
-                
+
                 try {
                     rnFetchBlobFileResp = (RNFetchBlobFileResp) responseBody;
                 } catch (ClassCastException ex) {
                     // unexpected response type
                     if (responseBody != null) {
-                        callback.invoke("Unexpected FileStorage response file: " + responseBody.string(), null);
+                        String bodyStr = "";
+                        try {
+                            bodyStr = responseBody.string();
+                        } catch (Exception ignored) {/*ignore */}
+                        callback.invoke("Unexpected FileStorage response file: " + bodyStr, null);
                     } else {
                         callback.invoke("Unexpected FileStorage response with no file.", null);
                     }
