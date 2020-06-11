@@ -125,6 +125,8 @@ public class RNFetchBlob extends ReactContextBaseJavaModule {
                 PackageManager pm = getCurrentActivity().getPackageManager();
                 if (intent.resolveActivity(pm) != null) {
                     this.getReactApplicationContext().startActivity(intent);
+                } else {
+                    promise.reject("ERESOLVEACTIVITY");
                 }
 
             } else {
