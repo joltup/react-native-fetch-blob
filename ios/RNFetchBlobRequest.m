@@ -192,16 +192,19 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 // set expected content length on response received
 - (void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
 {
-    expectedBytes = [response expectedContentLength];
+    expectedBytes = [response expectedContentLength];    
 
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+        
     NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
     NSString * respType = @"";
     respStatus = statusCode;
-
+    
+    
     if ([response respondsToSelector:@selector(allHeaderFields)])
     {
         NSDictionary *headers = [httpResponse allHeaderFields];
+        
         NSString * respCType = [[RNFetchBlobReqBuilder getHeaderIgnoreCases:@"Content-Type" fromHeaders:headers] lowercaseString];
 
         if (self.isServerPush) {
