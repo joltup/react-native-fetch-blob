@@ -67,7 +67,7 @@
                 }
                 // set content-length
                 [mheaders setValue:[NSString stringWithFormat:@"%lu",[postData length]] forKey:@"Content-Length"];
-                [mheaders setValue:@"100-continue" forKey:@"Expect"];
+                // [mheaders setValue:@"100-continue" forKey:@"Expect"];
                 // appaned boundary to content-type
                 [mheaders setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forKey:@"content-type"];
                 [request setHTTPMethod: method];
