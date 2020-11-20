@@ -16,16 +16,16 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:4.0.1'
     }
 }
 
 android {
-    compileSdkVersion safeExtGet('compileSdkVersion', 28)
+    compileSdkVersion safeExtGet('compileSdkVersion', 30)
     buildToolsVersion safeExtGet('buildToolsVersion', '28.0.3')
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', 16)
-        targetSdkVersion safeExtGet('targetSdkVersion', 28)
+        targetSdkVersion safeExtGet('targetSdkVersion', 30)
         versionCode 1
         versionName "1.0"
     }
@@ -41,6 +41,8 @@ android {
 
 dependencies {
     implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
-    //compile 'com.squareup.okhttp3:okhttp:+'
-    //{RNFetchBlob_PRE_0.28_DEPDENDENCY}
+    implementation 'com.squareup.okhttp3:okhttp:+'
+    implementation 'com.squareup.okhttp3:logging-interceptor:+'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:+'
+//    {RNFetchBlob_PRE_0.28_DEPDENDENCY}
 }

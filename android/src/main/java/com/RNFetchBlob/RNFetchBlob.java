@@ -24,8 +24,9 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.network.ForwardingCookieHandler;
 import com.facebook.react.modules.network.CookieJarContainer;
 import com.facebook.react.modules.network.OkHttpClientProvider;
-import okhttp3.OkHttpClient;
+
 import okhttp3.JavaNetCookieJar;
+import okhttp3.OkHttpClient;
 
 import java.io.File;
 import java.util.Map;
@@ -108,7 +109,7 @@ public class RNFetchBlob extends ReactContextBaseJavaModule {
     @ReactMethod
     public void actionViewIntent(String path, String mime, final Promise promise) {
         try {
-            Uri uriForFile = FileProvider.getUriForFile(getCurrentActivity(),
+            Uri uriForFile = FileProvider.getUriForFile(this.getReactApplicationContext(),
                     this.getReactApplicationContext().getPackageName() + ".provider", new File(path));
 
             if (Build.VERSION.SDK_INT >= 24) {
@@ -336,7 +337,7 @@ public class RNFetchBlob extends ReactContextBaseJavaModule {
         fsThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                RNFetchBlobFS.df(callback);
+                RNFetchBlobFS.df(callback, getReactApplicationContext());
             }
         });
     }
@@ -404,7 +405,7 @@ public class RNFetchBlob extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getSDCardDir(Promise promise) {
-        RNFetchBlobFS.getSDCardDir(promise);
+        RNFetchBlobFS.getSDCardDir(this.getReactApplicationContext(), promise);
     }
 
     @ReactMethod
