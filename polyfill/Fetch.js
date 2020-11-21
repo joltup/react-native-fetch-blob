@@ -40,6 +40,7 @@ class RNFetchBlobFetchPolyfill {
           promise = Blob.build(body).then((b) => {
             blobCache = b
             options.headers['Content-Type'] = 'multipart/form-data;boundary=' + b.multipartBoundary
+            options.headers['content-type'] = 'multipart/form-data;boundary=' + b.multipartBoundary
             return Promise.resolve(RNFetchBlob.wrap(b._ref))
           })
         }
