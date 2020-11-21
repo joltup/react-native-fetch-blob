@@ -89,22 +89,24 @@ static void initialize_tables() {
     
     @synchronized([RNFetchBlobNetwork class]) {
         [self.requestsTable setObject:request forKey:taskId];
-        [self checkProgressConfig];
+        [self checkProgressConfigForTask:taskId];
     }
 }
 
-- (void) checkProgressConfig {
+- (void) checkProgressConfigForTask:(NSString *)taskId {
     //reconfig progress
-    [self.rebindProgressDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, RNFetchBlobProgress * _Nonnull config, BOOL * _Nonnull stop) {
-        [self enableProgressReport:key config:config];
-    }];
-    [self.rebindProgressDict removeAllObjects];
+    RNFetchBlobProgress *downloadConfig = self.rebindProgressDict[taskId];
+    if (downloadConfig != nil) {
+        [self enableProgressReport:taskId config:downloadConfig];
+        [self.rebindProgressDict removeObjectForKey:taskId];
+    }
     
     //reconfig uploadProgress
-    [self.rebindUploadProgressDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, RNFetchBlobProgress * _Nonnull config, BOOL * _Nonnull stop) {
-        [self enableUploadProgress:key config:config];
-    }];
-    [self.rebindUploadProgressDict removeAllObjects];
+    RNFetchBlobProgress *uploadConfig = self.rebindUploadProgressDict[taskId];
+    if (uploadConfig != nil) {
+        [self enableUploadProgress:taskId config:uploadConfig];
+        [self.rebindUploadProgressDict removeObjectForKey:taskId];
+    }
 }
 
 - (void) enableProgressReport:(NSString *) taskId config:(RNFetchBlobProgress *)config
