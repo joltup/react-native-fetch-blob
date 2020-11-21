@@ -507,7 +507,7 @@ export interface AndroidApi {
     getSDCardApplicationDir(): Promise<string>;
 }
 
-type Methods = "POST" | "GET" | "DELETE" | "PUT" | "post" | "get" | "delete" | "put";
+type Methods = "POST" | "GET" | "DELETE" | "PUT" | "PATCH" | "post" | "get" | "delete" | "put" | "patch";
 
 /**
  * A declare class inherits Promise, it has extra method like progress, uploadProgress,
