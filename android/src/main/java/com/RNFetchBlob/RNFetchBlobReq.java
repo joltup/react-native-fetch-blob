@@ -185,7 +185,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                 }
                 // set headers
                 ReadableMapKeySetIterator it = headers.keySetIterator();
-                if(options.addAndroidDownloads.hasKey("mediaScannable") && options.addAndroidDownloads.hasKey("mediaScannable")) {
+                if(options.addAndroidDownloads.hasKey("mediaScannable") && options.addAndroidDownloads.getBoolean("mediaScannable")) {
                     req.allowScanningByMediaScanner();
                 }
                 while (it.hasNextKey()) {
