@@ -71,12 +71,13 @@ static void initialize_tables() {
     return _sharedInstance;
 }
 
-- (void) sendRequest:(__weak NSDictionary  * _Nullable )options
-       contentLength:(long) contentLength
-              bridge:(RCTBridge * _Nullable)bridgeRef
-              taskId:(NSString * _Nullable)taskId
-         withRequest:(__weak NSURLRequest * _Nullable)req
-            callback:(_Nullable RCTResponseSenderBlock) callback
+- (void)sendRequest:(__weak NSDictionary  * _Nullable )options
+      contentLength:(long) contentLength
+             bridge:(RCTBridge * _Nullable)bridgeRef
+             taskId:(NSString * _Nullable)taskId
+        withRequest:(__weak NSURLRequest * _Nullable)req
+           filePath:(NSString * _Nullable)filePath
+           callback:(_Nullable RCTResponseSenderBlock) callback
 {
     RNFetchBlobRequest *request = [[RNFetchBlobRequest alloc] init];
     [request sendRequest:options
@@ -85,6 +86,7 @@ static void initialize_tables() {
                   taskId:taskId
              withRequest:req
       taskOperationQueue:self.taskQueue
+                filePath:filePath
                 callback:callback];
     
     @synchronized([RNFetchBlobNetwork class]) {

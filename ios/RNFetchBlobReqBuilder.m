@@ -103,8 +103,8 @@
         if([[method lowercaseString] isEqualToString:@"post"] || [[method lowercaseString] isEqualToString:@"put"] || [[method lowercaseString] isEqualToString:@"patch"]) {
             // generate octet-stream body
             if(body != nil) {
-                __block NSString * cType = [[self class] getHeaderIgnoreCases:@"content-type" fromHeaders:mheaders];
-                __block NSString * transferEncoding = [[self class] getHeaderIgnoreCases:@"transfer-encoding" fromHeaders:mheaders];
+                 NSString * cType = [[self class] getHeaderIgnoreCases:@"content-type" fromHeaders:mheaders];
+                
                 // when headers does not contain a key named "content-type" (case ignored), use default content type
                 if(cType == nil)
                 {
@@ -133,16 +133,6 @@
                         }];
                         
                         return;
-                    }
-                    size = [[[NSFileManager defaultManager] attributesOfItemAtPath:orgPath error:nil] fileSize];
-                    if(transferEncoding != nil && [[transferEncoding lowercaseString] isEqualToString:@"chunked"])
-                    {
-                        [request setHTTPBodyStream: [NSInputStream inputStreamWithFileAtPath:orgPath ]];
-                    }
-                    else
-                    {
-                        __block NSData * bodyBytes = [NSData dataWithContentsOfFile:orgPath ];
-                        [request setHTTPBody:bodyBytes];
                     }
                 }
                 // otherwise convert it as BASE64 data string
