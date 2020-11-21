@@ -12,7 +12,6 @@
 #import "RNFetchBlobConst.h"
 #import "RNFetchBlobReqBuilder.h"
 
-#import "IOS7Polyfill.h"
 #import <CommonCrypto/CommonDigest.h>
 
 
@@ -214,20 +213,20 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 
             return;
         } else {
-            self.isServerPush = [[respCType lowercaseString] RNFBContainsString:@"multipart/x-mixed-replace;"];
+            self.isServerPush = [[respCType lowercaseString] containsString:@"multipart/x-mixed-replace;"];
         }
 
         if(respCType)
         {
             NSArray * extraBlobCTypes = [options objectForKey:CONFIG_EXTRA_BLOB_CTYPE];
 
-            if ([respCType RNFBContainsString:@"text/"]) {
+            if ([respCType containsString:@"text/"]) {
                 respType = @"text";
-            } else if ([respCType RNFBContainsString:@"application/json"]) {
+            } else if ([respCType containsString:@"application/json"]) {
                 respType = @"json";
             } else if(extraBlobCTypes) { // If extra blob content type is not empty, check if response type matches
                 for (NSString * substr in extraBlobCTypes) {
-                    if ([respCType RNFBContainsString:[substr lowercaseString]]) {
+                    if ([respCType containsString:[substr lowercaseString]]) {
                         respType = @"blob";
                         respFile = YES;
                         destPath = [RNFetchBlobFS getTempPath:taskId withExtension:nil];
@@ -285,7 +284,7 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 
             // if not set overwrite in options, defaults to TRUE
             BOOL overwrite = [options valueForKey:@"overwrite"] == nil ? YES : [[options valueForKey:@"overwrite"] boolValue];
-            BOOL appendToExistingFile = [destPath RNFBContainsString:@"?append=true"];
+            BOOL appendToExistingFile = [destPath containsString:@"?append=true"];
 
             appendToExistingFile = !overwrite;
 
