@@ -297,7 +297,22 @@ class RNFetchBlobFS {
             promise.reject("RNFetchBlob.getSDCardApplicationDir", "External storage not mounted");
         }
     }
-
+    // method for android
+     public static String getSDCardApplicationDir(ReactApplicationContext ctx) {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            try {
+                final String path = ctx.getExternalFilesDir(null).getParentFile().getAbsolutePath();
+                return  path;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "";
+            }
+        } else {
+            Log.d("getSDCardApplicationDir","media is not mounted");
+            return "";
+        }
+    }
+    
     /**
      * Static method that returns a temp file path
      * @param taskId    An unique string for identify

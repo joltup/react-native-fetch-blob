@@ -566,6 +566,38 @@ RNFetchBlob.config({
 .then(...)
 ```
 
+## React Native developers to access android device path for app bundle
+
+```js
+ NativeModules.RNFetchBlob.getAppDir((error, path) => {
+
+   //here path is your apps directory in mobile device
+
+   RNFetchBlob
+
+    .config({
+        addAndroidDownloads : {
+            useDownloadManager : true, // <-- this is the only thing required
+            // Optional, override notification setting (default to true)
+            notification : false,
+            // Optional, but recommended since android DownloadManager will fail when
+            // the url does not contains a file extension, by default the mime type will be text/plain
+            mime : 'text/plain',
+            description : 'File downloaded by download manager.'
+        }
+    })
+    .fetch('GET', 'http://example.com/file/somefile')
+    .then((resp) => {
+      // the path of downloaded file
+      resp.path()
+    })
+ })
+```
+ In case error appears or app crash just go to
+  AndroidMaifest.xml file and add
+     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+
+
 **Open Downloaded File with Intent**
 
 This is a new feature added in `0.9.0` if you're going to open a file path using official [Linking](https://facebook.github.io/react-native/docs/linking.html) API that might not work as expected, also, if you're going to install an APK in `Downloads` app, that will not function too. As an alternative, you can try `actionViewIntent` API, which will send an ACTION_VIEW intent for you which uses the given `MIME` type.
