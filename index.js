@@ -21,7 +21,6 @@ import fs from './fs'
 import getUUID from './utils/uuid'
 import base64 from 'base-64'
 import polyfill from './polyfill'
-import _ from 'lodash'
 import android from './android'
 import ios from './ios'
 import JSONStream from './json-stream'
@@ -224,8 +223,8 @@ function fetch(...args:any):Promise {
 
   // # 241 normalize null or undefined headers, in case nil or null string
   // pass to native context
-  headers = _.reduce(headers, (result, value, key) => {
-    result[key] = value || ''
+  headers = headers && Object.keys(headers).reduce((result, key) => {
+    result[key] = headers[key] || ''
     return result
   }, {});
 
