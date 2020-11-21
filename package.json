@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "base-64": "0.1.0",
-    "glob": "7.0.6"
+    "glob": "7.0.6",
+    "oboe": "2.1.4"
   },
   "keywords": [
     "react-native",
