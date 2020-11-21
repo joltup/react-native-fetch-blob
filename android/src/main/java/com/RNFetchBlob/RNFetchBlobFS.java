@@ -514,7 +514,7 @@ class RNFetchBlobFS {
         }
     }
 
-    private static void deleteRecursive(File fileOrDirectory) throws IOException {
+    private static void deleteRecursive(File fileOrDirectory) {
         if (fileOrDirectory.isDirectory()) {
             File[] files = fileOrDirectory.listFiles();
             if (files == null) {
@@ -525,10 +525,7 @@ class RNFetchBlobFS {
                 }
             }
         }
-        boolean result = fileOrDirectory.delete();
-        if (!result) {
-            throw new IOException("Failed to delete '" + fileOrDirectory + "'");
-        }
+        fileOrDirectory.delete();
     }
 
     /**
