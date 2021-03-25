@@ -2,7 +2,7 @@ require "json"
 package = JSON.parse(File.read('package.json'))
 
 Pod::Spec.new do |s|
-  s.name             = package['name']
+  s.name             = 'rn-fetch-blob'
   s.version          = package['version']
   s.summary          = package['description']
   s.requires_arc = true
