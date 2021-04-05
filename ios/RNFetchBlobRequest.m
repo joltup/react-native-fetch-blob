@@ -161,8 +161,9 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
         respFile = NO;
     }
 
-    self.task = [session dataTaskWithRequest:req];
-    [self.task resume];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:req];
+    [task resume];
+    self.task = task;
 
     // network status indicator
     if ([[options objectForKey:CONFIG_INDICATOR] boolValue]) {
