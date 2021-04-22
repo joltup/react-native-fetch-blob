@@ -41,6 +41,7 @@ android {
 
 dependencies {
     implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     //compile 'com.squareup.okhttp3:okhttp:+'
     //{RNFetchBlob_PRE_0.28_DEPDENDENCY}
 }
